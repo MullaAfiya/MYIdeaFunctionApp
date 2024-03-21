@@ -1,13 +1,8 @@
-# ASP.NET
-# Build and test ASP.NET projects.
-# Add steps that publish symbols, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
-
 trigger:
 - main
 
 pool:
-    name: Default
+  name: Default
 
 variables:
   solution: '**/*.sln'
@@ -17,6 +12,7 @@ variables:
   AppType: 'functionApp'
   AppName: 'MyFuncApp'
   ArtifactFileName: 'MyArtifact.zip'  # Hardcoded artifact name
+
 steps:
 - task: DotNetCoreCLI@2
   displayName: 'Build project'
@@ -37,34 +33,19 @@ steps:
     ArtifactName: 'drop'
     publishLocation: 'Container'
 
-- task: DownloadBuildArtifacts@0
-  displayName: 'Download artifact'
-  inputs:
-     artifactName: 'drop'
-     downloadPath: '$(System.DefaultWorkingDirectory)/DownloadedArtifact'
-     targetPath: '$(System.DefaultWorkingDirectory)/DownloadedArtifact'
-     
-# - powershell: |
-#     $artifactName = Get-ChildItem -Path "$(System.DefaultWorkingDirectory)/DownloadedArtifact" -Filter "*.zip" | Select-Object -First 1 -ExpandProperty Name
-#     Write-Host "Downloaded Artifact Name: $artifactName"
-#     displayName: 'Check Downloaded Artifact Name'
-
-# - powershell: |
-#     $artifactName = Get-ChildItem -Path "$(System.DefaultWorkingDirectory)/DownloadedArtifact" -Filter "*.zip" | Select-Object -First 1 -ExpandProperty Name
-#     Write-Output "Downloaded Artifact Name: $artifactName"
-#   displayName: 'Check Downloaded Artifact Name'
-
-- powershell: |
-    $artifactPath = Get-ChildItem -Path "$(System.DefaultWorkingDirectory)/DownloadedArtifact/drop" -Filter "*.zip" | Select-Object -First 1 -ExpandProperty FullName
-    Write-Output "Downloaded Artifact Path: $artifactPath"
-    Write-Output "##vso[task.setvariable variable=DownloadedArtifactPath;]$artifactPath"
-    echo $artifactPath
+- task: PowerShell@2
   displayName: 'Set Downloaded Artifact Path'
+  inputs:
+    targetType: 'inline'
+    script: |
+      $artifactPath = Get-ChildItem -Path "$(System.DefaultWorkingDirectory)/DownloadedArtifact/drop" -Filter "*.zip" | Select-Object -First 1 -ExpandProperty FullName
+      Write-Output "##vso[task.setvariable variable=DownloadedArtifactPath;isOutput=true]$artifactPath"
+      Write-Output "Downloaded Artifact Path: $artifactPath"
 
 - task: AzureFunctionApp@1
   displayName: 'Deploy Azure Function App'
   inputs:
-   azureSubscription: 'FunctionAppSvc'  # Update with your correct service connection ID
-   appType: 'functionApp'
-   appName: 'MyIdeaFncApp'
-   package: $artifactPath
+    azureSubscription: 'FunctionAppSvc'  # Update with your correct service connection ID
+    appType: 'functionApp'
+    appName: 'MyIdeaFncApp'
+    package: '$(DownloadedArtifactPath)'
