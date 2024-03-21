@@ -49,11 +49,17 @@ steps:
 #     Write-Host "Downloaded Artifact Name: $artifactName"
 #     displayName: 'Check Downloaded Artifact Name'
 
-- powershell: |
-    $artifactName = Get-ChildItem -Path "$(System.DefaultWorkingDirectory)/DownloadedArtifact" -Filter "*.zip" | Select-Object -First 1 -ExpandProperty Name
-    Write-Output "Downloaded Artifact Name: $artifactName"
-  displayName: 'Check Downloaded Artifact Name'
+# - powershell: |
+#     $artifactName = Get-ChildItem -Path "$(System.DefaultWorkingDirectory)/DownloadedArtifact" -Filter "*.zip" | Select-Object -First 1 -ExpandProperty Name
+#     Write-Output "Downloaded Artifact Name: $artifactName"
+#   displayName: 'Check Downloaded Artifact Name'
 
+- powershell: |
+    $artifactPath = Get-ChildItem -Path "$(System.DefaultWorkingDirectory)/DownloadedArtifact/drop" -Filter "*.zip" | Select-Object -First 1 -ExpandProperty FullName
+    Write-Output "Downloaded Artifact Path: $artifactPath"
+    Write-Output "##vso[task.setvariable variable=DownloadedArtifactPath;]$artifactPath"
+    echo $artifactPath
+  displayName: 'Set Downloaded Artifact Path'
 
 # - task: AzureFunctionApp@1
 #   displayName: 'Deploy Azure Function App'
