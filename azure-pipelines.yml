@@ -44,4 +44,4 @@ steps:
     azureSubscription: 'FunctionAppSvc'
     appType: 'functionApp'
     appName: 'MyIdeaFncApp' 
-    package: '$(System.DefaultWorkingDirectory)/_MyFuncApp-Azure Functions for .NET-CI/drop/12.zip'
+    package: '$(DownloadBuildArtifacts.downloadDrop.artifactPath)'
