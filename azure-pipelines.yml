@@ -67,4 +67,4 @@ steps:
    azureSubscription: 'FunctionAppSvc'  # Update with your correct service connection ID
    appType: 'functionApp'
    appName: 'MyIdeaFncApp'
-   package: '$artifactPath'
+   package: $artifactPath
