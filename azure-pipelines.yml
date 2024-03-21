@@ -32,10 +32,16 @@ steps:
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact: drop'
 
+- task: DownloadBuildArtifacts@0
+  displayName: 'Download artifact'
+  inputs:
+    artifactName: 'drop'
+    downloadPath: '$(System.DefaultWorkingDirectory)/_MyFuncApp-Azure Functions for .NET-CI'
+
 - task: AzureFunctionApp@1
   displayName: 'Deploy Azure Function App'
   inputs:
     azureSubscription: 'FunctionAppSvc'
     appType: 'functionApp'
     appName: 'MyIdeaFncApp' 
-    package: '$(System.DefaultWorkingDirectory)/_MyFuncApp-Azure Functions for .NET-CI/drop/11.zip'
+    package: '$(System.DefaultWorkingDirectory)/_MyFuncApp-Azure Functions for .NET-CI/drop/12.zip'
