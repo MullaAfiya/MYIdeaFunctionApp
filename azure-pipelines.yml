@@ -43,11 +43,17 @@ steps:
      artifactName: 'drop'
      downloadPath: '$(System.DefaultWorkingDirectory)/DownloadedArtifact'
      targetPath: '$(System.DefaultWorkingDirectory)/DownloadedArtifact'
+     
+- powershell: |
+    $artifactName = Get-ChildItem -Path "$(System.DefaultWorkingDirectory)/DownloadedArtifact" -Filter "*.zip" | Select-Object -First 1 -ExpandProperty Name
+    Write-Host "Downloaded Artifact Name: $artifactName"
+    displayName: 'Check Downloaded Artifact Name'
 
-- task: AzureFunctionApp@1
-  displayName: 'Deploy Azure Function App'
-  inputs:
-    azureSubscription: 'FunctionAppSvc'  # Update with your correct service connection ID
-    appType: 'functionApp'
-    appName: 'MyIdeaFncApp'
-    package: '$(System.DefaultWorkingDirectory)/DownloadedArtifact/$(ArtifactFileName)'
+
+# - task: AzureFunctionApp@1
+#   displayName: 'Deploy Azure Function App'
+#   inputs:
+#     azureSubscription: 'FunctionAppSvc'  # Update with your correct service connection ID
+#     appType: 'functionApp'
+#     appName: 'MyIdeaFncApp'
+#     package: '$(System.DefaultWorkingDirectory)/DownloadedArtifact/$(ArtifactFileName)'
