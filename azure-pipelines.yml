@@ -35,7 +35,7 @@ steps:
 - task: AzureFunctionApp@1
   displayName: 'Deploy Azure Function App'
   inputs:
-    azureSubscription: '$(Parameters.AzureSubscription)'
-    appType: '$(Parameters.AppType)'
-    appName: '$(Parameters.AppName)'
+    azureSubscription: 'FunctionAppSvc'
+    appType: 'functionApp'
+    appName: 'MyIdeaFncApp' 
     package: '$(System.DefaultWorkingDirectory)/_MyIdeaFunctionApp-Azure Functions for .NET-CI/drop/2.zip'
