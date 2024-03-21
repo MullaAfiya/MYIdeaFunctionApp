@@ -32,16 +32,16 @@ steps:
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact: drop'
 
-- task: DownloadBuildArtifacts@0
-  displayName: 'Download artifact'
-  inputs:
-    artifactName: 'drop'
-    downloadPath: '$(System.DefaultWorkingDirectory)/_MyFuncApp-Azure Functions for .NET-CI'
-    targetPath: '$(System.DefaultWorkingDirectory)/DownloadedArtifact'
+# - task: DownloadBuildArtifacts@0
+#   displayName: 'Download artifact'
+#   inputs:
+#     artifactName: 'drop'
+#     downloadPath: '$(System.DefaultWorkingDirectory)/_MyFuncApp-Azure Functions for .NET-CI'
+#     targetPath: '$(System.DefaultWorkingDirectory)/DownloadedArtifact'
 
-- powershell: |
-    Write-Host "##vso[task.setvariable variable=DownloadedArtifactPath]$(System.DefaultWorkingDirectory)/DownloadedArtifact/12.zip"
-  displayName: 'Set Downloaded Artifact Path'
+# - powershell: |
+#     Write-Host "##vso[task.setvariable variable=DownloadedArtifactPath]$(System.DefaultWorkingDirectory)/DownloadedArtifact/12.zip"
+#   displayName: 'Set Downloaded Artifact Path'
 
 - task: AzureFunctionApp@1
   displayName: 'Deploy Azure Function App'
@@ -49,4 +49,4 @@ steps:
     azureSubscription: 'FunctionAppSvc'  # Update with your correct service connection ID
     appType: 'functionApp'
     appName: 'MyIdeaFncApp'
-    package: '$(DownloadedArtifactPath)'
+    package: '$(System.DefaultWorkingDirectory)/_MyIdeaFunctionApp-Azure Functions for .NET-CI/drop/*.zip'
