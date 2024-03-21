@@ -37,11 +37,16 @@ steps:
   inputs:
     artifactName: 'drop'
     downloadPath: '$(System.DefaultWorkingDirectory)/_MyFuncApp-Azure Functions for .NET-CI'
+    targetPath: '$(System.DefaultWorkingDirectory)/DownloadedArtifact'
+
+- script: |
+    echo "##vso[task.setvariable variable=DownloadedArtifactPath]$(System.DefaultWorkingDirectory)/DownloadedArtifact/12.zip"
+  displayName: 'Set Downloaded Artifact Path'
 
 - task: AzureFunctionApp@1
   displayName: 'Deploy Azure Function App'
   inputs:
-    azureSubscription: 'FunctionAppSvc'
+    azureSubscription: 'FunctionAppSvc'  # Update with your correct service connection ID
     appType: 'functionApp'
-    appName: 'MyIdeaFncApp' 
-    package: '$(DownloadBuildArtifacts.downloadDrop.artifactPath)'
+    appName: 'MyFuncApp'
+    package: '$(DownloadedArtifactPath)'
