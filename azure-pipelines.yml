@@ -13,7 +13,9 @@ variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-
+  AzureSubscription: 'a5a67ecd-d13c-4ae6-a649-31193d342fdb'
+  AppType: 'functionApp'
+  AppName: 'MyIdeaFncApp'
 steps:
 - task: DotNetCoreCLI@2
   displayName: 'Build project'
@@ -29,3 +31,11 @@ steps:
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact: drop'
+
+- task: AzureFunctionApp@1
+  displayName: 'Deploy Azure Function App'
+  inputs:
+    azureSubscription: '$(Parameters.AzureSubscription)'
+    appType: '$(Parameters.AppType)'
+    appName: '$(Parameters.AppName)'
+    package: '$(System.DefaultWorkingDirectory)/_MyIdeaFunctionApp-Azure Functions for .NET-CI/drop/2.zip'
