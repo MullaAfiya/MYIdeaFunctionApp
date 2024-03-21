@@ -61,10 +61,10 @@ steps:
     echo $artifactPath
   displayName: 'Set Downloaded Artifact Path'
 
-# - task: AzureFunctionApp@1
-#   displayName: 'Deploy Azure Function App'
-#   inputs:
-#     azureSubscription: 'FunctionAppSvc'  # Update with your correct service connection ID
-#     appType: 'functionApp'
-#     appName: 'MyIdeaFncApp'
-#     package: '$(System.DefaultWorkingDirectory)/DownloadedArtifact/$(ArtifactFileName)'
+- task: AzureFunctionApp@1
+  displayName: 'Deploy Azure Function App'
+  inputs:
+   azureSubscription: 'FunctionAppSvc'  # Update with your correct service connection ID
+   appType: 'functionApp'
+   appName: 'MyIdeaFncApp'
+   package: '$artifactPath'
