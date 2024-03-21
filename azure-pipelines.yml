@@ -8,10 +8,6 @@ variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  AzureSubscription: 'a5a67ecd-d13c-4ae6-a649-31193d342fdb'
-  AppType: 'functionApp'
-  AppName: 'MyFuncApp'
-  ArtifactFileName: 'MyArtifact.zip'  # Hardcoded artifact name
 
 steps:
 - task: DotNetCoreCLI@2
@@ -33,14 +29,6 @@ steps:
     ArtifactName: 'drop'
     publishLocation: 'Container'
 
-# - task: PowerShell@2
-#   displayName: 'Set Downloaded Artifact Path'
-#   inputs:
-#     targetType: 'inline'
-#     script: |
-#       $artifactPath = Get-ChildItem -Path "$(System.DefaultWorkingDirectory)/DownloadedArtifact/drop" -Filter "*.zip" | Select-Object -First 1 -ExpandProperty FullName
-#       Write-Output "##vso[task.setvariable variable=DownloadedArtifactPath;isOutput=true]$artifactPath"
-#       Write-Output "Downloaded Artifact Path: $artifactPath"
 
 - task: AzureFunctionApp@1
   displayName: 'Deploy Azure Function App'
@@ -48,6 +36,5 @@ steps:
     azureSubscription: 'FunctionAppSvc'  # Update with your correct service connection ID
     appType: 'functionApp'
     appName: 'MyIdeaFncApp'
-#    package: '$(DownloadedArtifactPath)'
     package: 'C:/Users/Afiya/Desktop/AzureAgent/_work/2/a/**/*.zip'
     
