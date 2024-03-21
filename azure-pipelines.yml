@@ -44,10 +44,15 @@ steps:
      downloadPath: '$(System.DefaultWorkingDirectory)/DownloadedArtifact'
      targetPath: '$(System.DefaultWorkingDirectory)/DownloadedArtifact'
      
+# - powershell: |
+#     $artifactName = Get-ChildItem -Path "$(System.DefaultWorkingDirectory)/DownloadedArtifact" -Filter "*.zip" | Select-Object -First 1 -ExpandProperty Name
+#     Write-Host "Downloaded Artifact Name: $artifactName"
+#     displayName: 'Check Downloaded Artifact Name'
+
 - powershell: |
     $artifactName = Get-ChildItem -Path "$(System.DefaultWorkingDirectory)/DownloadedArtifact" -Filter "*.zip" | Select-Object -First 1 -ExpandProperty Name
-    Write-Host "Downloaded Artifact Name: $artifactName"
-    displayName: 'Check Downloaded Artifact Name'
+    Write-Output "Downloaded Artifact Name: $artifactName"
+  displayName: 'Check Downloaded Artifact Name'
 
 
 # - task: AzureFunctionApp@1
